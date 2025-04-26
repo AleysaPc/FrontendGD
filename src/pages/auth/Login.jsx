@@ -14,7 +14,6 @@ const Login = () => {
       // Eliminar datos antiguos antes de iniciar sesión
       localStorage.removeItem("Token");
       localStorage.removeItem("id_usuario");
-      localStorage.removeItem("id_tienda");
       localStorage.removeItem("sessionClosed"); // Eliminar sessionClosed si existe
 
       const response = await login(data.email, data.password);
@@ -25,7 +24,6 @@ const Login = () => {
 
       localStorage.setItem("Token", response.data.token);
       localStorage.setItem("id_usuario", response.data.user.id); // Suponiendo que el backend te devuelve el id del usuario
-      localStorage.setItem("id_tienda", response.data.user.lugar_de_trabajo); // Suponiendo que el backend te devuelve el id de la tienda
       console.log("id_usuario", response.data.user.id);
 
       setLoginSuccess(true);
@@ -37,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-blue-950 via-blue-700 to-blue-400">
+    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-orange-950 via-blue-700 to-blue-400">
       <div className="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg">
         {/* Sección de Logo y Nombre */}
         <div className="flex flex-col items-center mb-6">

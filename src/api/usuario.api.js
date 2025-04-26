@@ -2,7 +2,7 @@ import { createApi } from "./api.config";
 import { createCrudOperations} from "./api.crud";
 import { createApiInstance, request} from "./api.Base";
 
-const ApiUsers = createApi("usuario");
+const ApiUsers = createApi("usuario"); //va armando la url base para el api de usuario
 
 // Crear operaciones CRUD específicas para los usuarios
 export const UsuariosAPI = createCrudOperations(ApiUsers, "usuario");

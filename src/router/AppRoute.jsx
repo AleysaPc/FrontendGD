@@ -12,7 +12,7 @@ const FallbackComponent = () => <div>Hubo un error al cargar la página</div>;
 
 const rutasPublicas = [...authRoutes];
 const rutasPrivadas = [
-  ...homeRoutes,
+  ...homeRoutes,//... tres puntos para indicar que hay mas cosas adelante 
   ...usuariosRoutes,
 ];
 
@@ -23,8 +23,8 @@ const AppRoutes = () => {
         fallback={<div className="spinner">Cargando Pagina Espere</div>}
       >
         <Routes>
-          {/* Rutas publicas */}
-          <Route element={<PublicLayout />}>
+          {/* Rutas publicas - PADRE*/}
+          <Route element={<PublicLayout />}> 
             {rutasPublicas.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
             ))}
