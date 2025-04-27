@@ -4,9 +4,10 @@ import { ErrorBoundary } from "react-error-boundary";
 import ProtectedRoute from "./ProtectedRoute";//
 import MainLayout from "../components/layout/MainLayout";//
 import PublicLayout from "../components/layout/PublicLayout";
-import { authRoutes } from "../router/authRoutes";//
-import { homeRoutes } from "../router/homeRoutes";//
+import { authRoutes } from "./authRoutes";//
+import { homeRoutes } from "./homeRoutes";//
 import { usuariosRoutes } from "./usuariosRoutes";//
+import { correspondenciaRoutes } from "./correspondenciaRoutes";
 
 const FallbackComponent = () => <div>Hubo un error al cargar la página</div>;
 
@@ -14,7 +15,11 @@ const rutasPublicas = [...authRoutes];
 const rutasPrivadas = [
   ...homeRoutes,//... tres puntos para indicar que hay mas cosas adelante 
   ...usuariosRoutes,
+  ...correspondenciaRoutes,
 ];
+
+console.log('rutasPublicas:', rutasPublicas);
+console.log('rutasPrivadas:', rutasPrivadas);
 
 const AppRoutes = () => {
   return (

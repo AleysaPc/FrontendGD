@@ -1,51 +1,41 @@
-import {
-    FaBox,
-    FaBoxes,
-    FaCashRegister,
-    FaChartLine,
-    FaTruckMoving,
-    FaUser,
-  } from "react-icons/fa";
-  
-  export const menus = [
-    {
-      title: "Ventas",
-      icon: FaCashRegister,
-      items: [
-        { label: "Realizar Venta", path: "/ventas/realizar" },
-        { label: "Ventas", path: "/ventas/ver" },
-        { label: "Productos Vendidos", path: "/ventas/detalleVentas" },
-        { label: "Reportes", path: "/ventas/reportes" },
-      ],
-      roleRequired: "Cajero",
-    },
-    {
-      title: "Predicción",
-      icon: FaChartLine,
-      items: [{ label: "Realizar Predicción", path: "/realizar_prediccion" }],
-    },
-    {
-      title: "Movimientos",
-      icon: FaTruckMoving,
-      items: [{ label: "Lista Movimientos", path: "/ver_movimientos" }],
-    },
-    {
-      title: "Inventario",
-      icon: FaBoxes,
-      items: [{ label: "Ver Inventario", path: "/ver_inventario" }],
-    },
-    {
-      title: "Productos",
-      icon: FaBox,
-      items: [
-        { label: "Productos", path: "/productList" },
-        { label: "Categorias", path: "/categorias" },
-        { label: "Proveedores", path: "/proveedores" },
-      ],
-    },
-    {
-      title: "Usuarios",
-      icon: FaUser,
-      items: [{ label: "Lista de Usuarios", path: "/userList" }],
-    },
-  ];
+import { FaFileMedical, FaUser } from "react-icons/fa";
+import { RiArchiveDrawerFill, RiContactsBookFill } from "react-icons/ri";
+import { IoCreateSharp } from "react-icons/io5";
+
+export const menus = [
+  {
+    title: "Nuevo Registro",
+    icon: FaFileMedical,
+    items: [
+      { label: "Recibido", path: "/registro/recibido" },
+      { label: "Enviado", path: "/registro/enviado" },
+    ],
+    roleRequired: "Cajero",
+  },
+  {
+    title: "Registros",
+    icon: RiArchiveDrawerFill,
+    items: [
+      { label: "Correspondencia", path: "/correspondenciaList" },
+      { label: "Bandeja de Entrada", path: "/docEntranteList" },
+      { label: "Bandeja de Salida", path: "/realizar_prediccion" },
+    ],
+  },
+  {
+    title: "Crear Documento",
+    icon: IoCreateSharp,
+    items: [{ label: "Externo", path: "/ver_movimientos" }, 
+            { label: "Interno", path: "/ver_movimientos" }, 
+            { label: "En revisión", path: "/ver_movimientos" }],
+  },
+  {
+    title: "Contactos",
+    icon: RiContactsBookFill,
+    items: [{ label: "Lista de contactos", path: "/ver_inventario" }],
+  },
+  {
+    title: "Usuarios",
+    icon: FaUser,
+    items: [{ label: "Lista de Usuarios", path: "/userList" }],
+  },
+];
