@@ -1,11 +1,23 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondencias } from "../../../hooks/useEntities";
 import FormattedDate from "../../../components/shared/FormattedDate";
+import { Link } from "react-router-dom";
 
 function CorrespondenciaList() {
   const useFields = () => [
     { key: "index", label: "#" },
-    { key: "tipo", label: "Tipo" },
+    {
+      key: "tipo",
+      label: "Tipo",
+      render: (item) => (
+        <Link
+          to={`/editCorrespondencia/${item.id_correspondencia}`}
+          className="text-blue-400 font-bold hover:underline"
+        >
+          {item.tipo}
+        </Link>
+      ),
+    },
     {
       key: "fecha_registro",
       label: "Fecha de Registro",

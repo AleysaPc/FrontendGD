@@ -1,12 +1,13 @@
 import { InputField } from "../../../components/shared/InputField"
 import { SelectField } from "../../../components/shared/SelectField";
-import CreateEntity from "../../../components/shared/CreateEntity";
-import { useCorrespondenciaMutations, useUsers, useContactos } from "../../../hooks/useEntities";
+import EditEntity from "../../../components/shared/EditEntity";
+import { useCorrespondenciaMutations, useUsers, useContactos, useCorrespondencia } from "../../../hooks/useEntities";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import {  obtenerIdUser } from "../../../utils/auth";
+import { use } from "react";
 
-export default function createCorrespondencia() {
+export default function editCorrespondencia() {
 
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
@@ -42,29 +43,32 @@ export default function createCorrespondencia() {
 
   ];
 
-  const configuracionFormulario = { //Modelo 3 - Correspondencia
-    tipo: "",
-    referencia: "",
-    descripcion: "",
-    paginas: "",
-    prioridad: "",
-    estado: "",
-    comentario: "",
-    documento: "",
-    contacto: "", //Es el nombre del FK que tiene conectado con la correspondencia
-  };
+  const configuracionFormulario = (entidad) => ({ //Modelo 3 - Correspondencia
+    tipo: entidad?.data?.tipo || "", //El signo de interrogacion es para evitar errores de undefined
+    fecha_registro: entidad?.data?.fecha_registro || "", //El signo de interrogacion es para evitar errores de undefined
+    referencia: entidad?.data?.referencia || "",
+    descripcion: entidad?.data?.descripcion || "",
+    paginas: entidad?.data?.paginas || "",
+    prioridad: entidad?.data?.prioridad || "",
+    estado: entidad?.data?.estado || "",
+    comentario: entidad?.data?.comentario || "",
+    documento: entidad?.data?.documento || "",
+    contacto: entidad?.data?.contacto || "", //Es el nombre del FK que tiene conectado con la correspondencia
+ });
 
   const camposExtras = (formValues) => ({
     contacto: Number(formValues.contacto),
     usuario: logicaNegocio.idUsuario,
+    comentario: formValues.comentario,
   });
 
   const paraEnvio = (formValues) => ({
+    entityId: formValues.id_correspondencia, //del modelo correspondencia
     link: "/correspondenciaList",
     params: camposExtras(formValues),
   });
 
-  const construirCampos = (formValues, manejarEntradas) => [
+  const construirCampos = (formValues, manejarEntradas) => [ //formValues es para el manejo de los estados
 
     {
       component : SelectField,
@@ -73,6 +77,13 @@ export default function createCorrespondencia() {
       options : opcionesTipo,
       required : true,
       onChange : manejarEntradas.handleInputChange,
+    },
+    {
+        component : InputField,
+        label : "Fecha de Registro",
+        name : "fecha_registro",
+        required : true,
+        onChange : manejarEntradas.handleInputChange,
     },
     {
       component: InputField,
@@ -112,13 +123,12 @@ export default function createCorrespondencia() {
       onChange : manejarEntradas.handleInputChange,
       required : true,
     },
-    
     {
       component : InputField,
       label : "Comentario",
       name : "comentario",
+      required : true,
       onChange : manejarEntradas.handleInputChange,
-      required : false,
     },
     {
       component : SelectField,
@@ -157,8 +167,8 @@ export default function createCorrespondencia() {
   ]; 
   
   const paraNavegacion = {
-    title : "Crear Correspondencia",
-    subTitle : "Formulario para crear una nueva correspondencia",
+    title : "Editar Correspondencia",
+    subTitle : "Formulario para editar correspondencia",
     icon : FaPlus,
     actions : [
         {
@@ -172,12 +182,14 @@ export default function createCorrespondencia() {
   }
   
   return (
-    <CreateEntity
-      useEntityMutations={useCorrespondenciaMutations}
-      configForm={configuracionFormulario}
-      paraEnvio={paraEnvio}
-      construirCampos={construirCampos}
-      paraNavegacion={paraNavegacion}
+    <EditEntity
+        useEntityMutations={useCorrespondenciaMutations}
+        useEntity={useCorrespondencia}
+        configForm={configuracionFormulario}
+        paraEnvio={paraEnvio}
+        construirCampos={construirCampos}
+        paraNavegacion={paraNavegacion}
     />
+
   );
 }
