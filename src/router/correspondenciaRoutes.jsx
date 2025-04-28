@@ -1,11 +1,9 @@
 import { lazy } from "react";
 
-const DocEntranteList = lazy(() => import("../data/correspondencia/docEntrantes/DocEntrantesList"));
-const EditDocEntrante = lazy(() => import("../data/correspondencia/docEntrantes/editDocEntrante"));
-const CreateDocEntrante = lazy(() =>
-    import("../data/correspondencia/docEntrantes/crearDocEntrante")
-);
 const CorrespondenciaList = lazy(() => import("../data/correspondencia/correspondencia/CorrespondenciaList"));
+const CreateCorrespondencia = lazy(() => import("../data/correspondencia/correspondencia/createCorrespondencia"));
+const CorrespondenciaRecibidaList = lazy(() => import("../data/correspondencia/correspondencia/CorrespondenciaRecibidaList"));
+const CorrespondenciaEnviadaList = lazy(() => import("../data/correspondencia/correspondencia/CorrespondenciaEnviadaList"));
 
 export const correspondenciaRoutes = [
   // rutas de correspondencia
@@ -14,26 +12,15 @@ export const correspondenciaRoutes = [
     element: <CorrespondenciaList />,
   },
   {
-    path: "/docEntrantetList",
-    element: <DocEntranteList />,
+    path: "/correspondenciaRecibidaList",
+    element: <CorrespondenciaRecibidaList />,
   },
   {
-    path: "/editDocEntrante/:id",
-    element: <EditDocEntrante />,
+    path: "/correspondenciaEnviadaList",
+    element: <CorrespondenciaEnviadaList />,
   },
   {
-    path: "/createDocEntrante",
-    element: <CreateDocEntrante />,
-  },
-  
-  // categorias
-  //{
-    //path: "/categorias",
-    //element: <Categorias />,
-  //},
-  // proveedores
-  //{
-    //path: "/proveedores",
-    //element: <Proveedores />,
-  //},
+    path: "/createCorrespondencia",
+    element: <CreateCorrespondencia />,
+  }
 ];

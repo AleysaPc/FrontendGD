@@ -17,8 +17,8 @@ export const menus = [
     icon: RiArchiveDrawerFill,
     items: [
       { label: "Correspondencia", path: "/correspondenciaList" },
-      { label: "Bandeja de Entrada", path: "/docEntranteList" },
-      { label: "Bandeja de Salida", path: "/realizar_prediccion" },
+      { label: "Bandeja de Entrada", path: "/correspondenciaRecibidaList" },
+      { label: "Bandeja de Salida", path: "/correspondenciaEnviadaList" },
     ],
   },
   {

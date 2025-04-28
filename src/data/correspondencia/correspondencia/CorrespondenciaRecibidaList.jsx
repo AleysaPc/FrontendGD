@@ -1,11 +1,14 @@
+import { useCorrespondenciasEnviadas, useCorrespondenciasRecibidas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
-import { useCorrespondencias } from "../../../hooks/useEntities";
 import FormattedDate from "../../../components/shared/FormattedDate";
 
-function CorrespondenciaList() {
+function CorrespondenciaRecibidaList() {
   const useFields = () => [
     { key: "index", label: "#" },
-    { key: "tipo", label: "Tipo" },
+    {
+      key: "tipo",
+      label: "Tipo",
+    },
     {
       key: "fecha_registro",
       label: "Fecha de Registro",
@@ -25,11 +28,11 @@ function CorrespondenciaList() {
   ];
 
   const entityData = {
-    title: "Gestión de Correspondencia",
-    subTitle: "Listado de correspondencia",
-    loadingMessage: "Cargando correspondencia...",
-    errorMessage: "Error al obtener la correspondencia",
-    fetchDataHook: useCorrespondencias,
+    title: "Gestión de Correspondencias Recibidas",
+    subTitle: "Listado de correspondencias recibidas",
+    loadingMessage: "Cargando correspondencias recibidas...",
+    errorMessage: "Error al obtener las correspondencias recibidas",
+    fetchDataHook: useCorrespondenciasRecibidas,
     all_data: false, // true para obtener todos los datos, false para paginación
     itemKey: "id_correspondencia", //Debe ser igual al modelo
     entityFields: useFields,
@@ -43,6 +46,7 @@ function CorrespondenciaList() {
       },
     ],
   };
+
   return <EntityList entityData={entityData} />;
 }
-export default CorrespondenciaList;
+export default CorrespondenciaRecibidaList;

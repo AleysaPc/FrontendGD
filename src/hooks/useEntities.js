@@ -1,8 +1,9 @@
 import { useEntityMutations } from "./useEntityMutations";
-import {CorrespondenciaApi} from "../api/correspondencia.api";
+import {CorrespondenciaApi, CorrespondenciaEnviadaApi, CorrespondenciaRecbidaApi} from "../api/correspondencia.api";
 import useData from "./useData";
 import { CustomUsersAPI, RolesApi, PasswordResetAPI} from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
+import { ContactoApi } from "../api/contacto.api";
 
 //Correspondencia
 export const useCorrespondencias = (all_data = false, page = 1) => {
@@ -11,6 +12,17 @@ export const useCorrespondencias = (all_data = false, page = 1) => {
 
 export const useCorrespondencia = (id) => useData(CorrespondenciaApi, "correspondencias", id);
 export const useCorrespondenciaMutations = () => useEntityMutations(CorrespondenciaApi, "correspondencia");
+
+//Correspondencia Recibida
+export const useCorrespondenciasRecibidas = (all_data = false, page = 1) => { //Plural
+    return useData(CorrespondenciaRecbidaApi, "correspondencias_recibidas", null, { all_data, page }, 1000 * 60 * 5);}
+
+// Correspondencia Enviada
+export const useCorrespondenciasEnviadas = (all_data = false, page = 1) => {
+    return useData(CorrespondenciaEnviadaApi, "correspondencias_enviadas", null, { all_data, page }, 1000 * 60 * 5);
+}
+
+
 
 // Correspondencia Entrante
 export const useDocEntrantes = (all_data = false, page = 1) => { //Plural
@@ -47,4 +59,20 @@ export const usePasswordResetConfirm = () => {
   export const usePasswordResetRequest = () => {
     return useMutationWithToast((email) => PasswordResetAPI.requestReset(email), "Solicitud de restablecimiento de contraseña enviada", "Error al solicitar el restablecimiento de contraseña", null);
   }
+
+//Contacto
+export const useContactos = (all_data = false, page = 1) => {
+    return useData(ContactoApi, "contactos", null, { all_data, page }, 1000 * 60 * 5);
+};
+
+
+export const useContacto = (id) => useData(ContactoApi, "contactos", id);
+export const useContactoMutations = () => useEntityMutations(ContactoApi, "contacto");
+
+//Institucion
+export const useInstituciones = (all_data = false, page = 1) => {
+    return useData(ContactoApi, "instituciones", null, { all_data, page }, 1000 * 60 * 5);
+}
+export const useInstitucion = (id) => useData(ContactoApi, "instituciones", id);
+export const useInstitucionMutations = () => useEntityMutations(ContactoApi, "institucion");
 
