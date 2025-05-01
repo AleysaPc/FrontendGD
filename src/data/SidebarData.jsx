@@ -7,7 +7,7 @@ export const menus = [
     title: "Nuevo Registro",
     icon: FaFileMedical,
     items: [
-      { label: "Recibido", path: "/registro/recibido" },
+      { label: "Recibido", path: "/createDocEntrante" },
       { label: "Enviado", path: "/registro/enviado" },
     ],
     roleRequired: "Cajero",

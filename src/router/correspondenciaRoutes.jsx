@@ -5,6 +5,7 @@ const CreateCorrespondencia = lazy(() => import("../data/correspondencia/corresp
 const CorrespondenciaRecibidaList = lazy(() => import("../data/correspondencia/correspondencia/CorrespondenciaRecibidaList"));
 const CorrespondenciaEnviadaList = lazy(() => import("../data/correspondencia/correspondencia/CorrespondenciaEnviadaList"));
 const EditCorrespondencia = lazy(() => import("../data/correspondencia/correspondencia/editCorrespondencia"));
+const CreateDocEntrante = lazy(() => import("../data/correspondencia/correspondenciaEntrante/CreateDocEntrante"));
 
 export const correspondenciaRoutes = [
   // rutas de correspondencia
@@ -27,5 +28,9 @@ export const correspondenciaRoutes = [
   {
     path: "editCorrespondencia/:id",
     element: <EditCorrespondencia />,
+  },
+  {
+    path: "createDocEntrante",
+    element: <CreateDocEntrante />,
   }
 ];

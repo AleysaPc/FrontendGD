@@ -1,10 +1,19 @@
-import { useCorrespondenciasEnviadas, useCorrespondenciasRecibidas } from "../../../hooks/useEntities";
+import {
+  useCorrespondenciasEnviadas,
+  useCorrespondenciasRecibidas,
+  useDocEntrantes,
+} from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
 
 function CorrespondenciaRecibidaList() {
   const useFields = () => [
-    { key: "index", label: "#" },
+    { key: "index", 
+      label: "#" },
+    {
+      key: "nro_registro",
+      label: "Nro. Registro",
+    },
     {
       key: "tipo",
       label: "Tipo",
@@ -32,9 +41,9 @@ function CorrespondenciaRecibidaList() {
     subTitle: "Listado de correspondencias recibidas",
     loadingMessage: "Cargando correspondencias recibidas...",
     errorMessage: "Error al obtener las correspondencias recibidas",
-    fetchDataHook: useCorrespondenciasRecibidas,
+    fetchDataHook: useDocEntrantes,
     all_data: false, // true para obtener todos los datos, false para paginación
-    itemKey: "id_correspondencia", //Debe ser igual al modelo
+    itemKey: "id_doc_entrante", //Debe ser igual al modelo
     entityFields: useFields,
     clavesBusqueda: ["referencia"],
     actions: [
