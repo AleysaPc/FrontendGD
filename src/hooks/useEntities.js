@@ -1,5 +1,5 @@
 import { useEntityMutations } from "./useEntityMutations";
-import {CorrespondenciaApi, CorrespondenciaEnviadaApi, CorrespondenciaRecbidaApi} from "../api/correspondencia.api";
+import {CorrespondenciaApi, CorrespondenciaEnviadaApi, CorrespondenciaRecbidaApi, Doc_EntranteApi, Doc_SalienteApi} from "../api/correspondencia.api";
 import useData from "./useData";
 import { CustomUsersAPI, RolesApi, PasswordResetAPI} from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
@@ -21,22 +21,19 @@ export const useCorrespondenciasRecibidas = (all_data = false, page = 1) => { //
 export const useCorrespondenciasEnviadas = (all_data = false, page = 1) => {
     return useData(CorrespondenciaEnviadaApi, "correspondencias_enviadas", null, { all_data, page }, 1000 * 60 * 5);
 }
-
-
-
 // Correspondencia Entrante
 export const useDocEntrantes = (all_data = false, page = 1) => { //Plural
-    return useData(CorrespondenciaApi, "doc_entrantes", null, { all_data, page }, 1000 * 60 * 5);
+    return useData(Doc_EntranteApi, "doc_entrantes", null, { all_data, page }, 1000 * 60 * 5);
 }
-export const useDocEntrante = (id) => useData(CorrespondenciaApi, "doc_entrantes", id); //Singular
-export const useDocEntranteMutations = () => useEntityMutations(CorrespondenciaApi, "doc_entrante");
+export const useDocEntrante = (id) => useData(Doc_EntranteApi, "doc_entrante", id); //Singular
+export const useDocEntranteMutations = () => useEntityMutations(Doc_EntranteApi, "doc_entrante");
 
 // Correspondencia Saliente
-export const useDocSalietes = (all_data = false, page = 1) => { //Plural
-    return useData(CorrespondenciaApi, "doc_salientes", null, { all_data, page }, 1000 * 60 * 5);
+export const useDocSalientes = (all_data = false, page = 1) => { //Plural
+    return useData(Doc_SalienteApi, "doc_salientes", null, { all_data, page }, 1000 * 60 * 5);
 }
-export const useDocSaliente = (id) => useData(CorrespondenciaApi, "doc_salientes", id); //Singular
-export const useDocSalienteMutations = () => useEntityMutations(CorrespondenciaApi, "doc_saliente");
+export const useDocSaliente = (id) => useData(Doc_SalienteApi, "doc_saliente", id); //Singular
+export const useDocSalienteMutations = () => useEntityMutations(Doc_SalienteApi, "doc_saliente");
 
 //users
 export const useUsers = (all_data = false, page = 1) => {

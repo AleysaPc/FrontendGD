@@ -8,32 +8,66 @@ import FormattedDate from "../../../components/shared/FormattedDate";
 
 function CorrespondenciaRecibidaList() {
   const useFields = () => [
-    { key: "index", 
-      label: "#" },
+    { key: "index", label: "#" },
     {
       key: "nro_registro",
       label: "Nro. Registro",
     },
     {
-      key: "tipo",
-      label: "Tipo",
-    },
-    {
-      key: "fecha_registro",
-      label: "Fecha de Registro",
+      key: "fecha_recepcion",
+      label: "Fecha Recepción",
       render: (item) => (
-        <FormattedDate date={item.fecha_registro} format="DD/MMM/YYYY" />
+        <FormattedDate date={item.fecha_recepcion} format="DD/MMM/YYYY" />
       ),
     },
-    { key: "referencia", label: "Referencia" },
-    { key: "prioridad", label: "Prioridad" },
-    { key: "estado", label: "Estado" },
+    {
+      key: "fecha_respuesta",
+      label: "Fecha Respuesta",
+      render: (item) => (
+        <FormattedDate date={item.fecha_respuesta} format="DD/MMM/YYYY" />
+      ),
+    },
+    {
+      key: "referencia",
+      label: "Referencia",
+      render: (item) => item.correspondencia?.referencia,
+    },
+    { key: "prioridad", 
+      label: "Prioridad",
+      render: (item) => item.correspondencia?.prioridad,}, 
+    { key: "estado",
+      label: "Estado",
+      render: (item) => item.correspondencia?.estado,},
     {
       key: "contacto",
-      label: "Contacto",
-      render: (item) =>
-        ` ${item.nombre_contacto} - ${item.apellido_paterno_contacto} - ${item.titulo_profesional}`,
+      label: "Remitente ee",
+      render: (item) => 
+        ` ${item.correspondencia?.contacto?.nombre_contacto}
+          ${item.correspondencia?.contacto?.apellido_pat_contacto}
+          ${item.correspondencia?.contacto?.apellido_mat_contacto} - 
+          ${item.correspondencia?.contacto?.titulo_profesional} -
+          ${item.correspondencia?.contacto?.institucion.razon_social}`
     },
+    {
+      key: "acciones",
+      label: "Acciones",
+      render: (item) => (
+        <div className="flex gap-2">
+          <a
+            href={`detailDocEntrante/${item.id_doc_entrante}`}
+            className="bg-lime-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Ver
+          </a>
+          <a
+            href={`/correspondenciaRecibida/${item.id_doc_entrante}/edit`}
+            className="bg-orange-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Editar
+          </a>
+        </div>
+      ),
+    }
   ];
 
   const entityData = {

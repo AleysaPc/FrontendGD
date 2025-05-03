@@ -1,58 +1,86 @@
-import {useCorrespondencias} from "../../../hooks/useEntities";
+import {
+  useDocSalientes,
+} from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
-import FormattedDate from "../../../components/shared/FormattedDate";
+import  FormattedDate  from "../../../components/shared/FormattedDate";
 
 function CorrespondenciaEnviadaList() {
-
-    //Obtenemos los campos del modelo
-    const correspondencias = useCorrespondencias();
-    // Filtramos las correspondencias enviadas
-    const correspondenciasEnviadas = Array.isArray(correspondencias)
-      ? correspondencias.filter((item) => item.tipo === "enviado")
-      : [];
-
-      const useFields = () => [
-        {key: "index", label: "#"},
-        {
-            key: "tipo",
-            label: "Tipo",
-            render: (item) => (item.tipo === "enviado" ? "Enviado" : null),
-          },
-        {key: "fecha_registro", label: "Fecha de Registro", render : (item) => <FormattedDate date={item.fecha_registro} format="DD/MMM/YYYY" />},
-        {key: "referencia", label: "Referencia"},
-        {key: "prioridad", label: "Prioridad"},
-        {key: "estado", label: "Estado"},
-        {key: "contacto", label: "Contacto", render : (item) => ` ${item.nombre_contacto} - ${item.apellido_paterno_contacto} - ${item.titulo_profesional}`},
-
-      ];
-
-    const EntityData = {
-        title: "Gestión de Correspondencias Enviadas",
-        subTitle: "Listado de correspondencias enviadas",
-        loadingMessage: "Cargando correspondencias enviadas...",
-        errorMessage: "Error al obtener las correspondencias enviadas",
-        fetchDataHook: useCorrespondencias,
-        all_data: false, // true para obtener todos los datos, false para paginación
-        itemKey: "id_correspondencia", //Debe ser igual al modelo
-        entityFields: useFields,
-        clavesBusqueda: ["referencia"],
-        actions: [
-            {
-            to: "/createCorrespondencia",
-            label: "Crear Correspondencia",
-            estilos:
-                "bg-purple-500 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-            },
-        ],
+  const useFields = () => [
+    { key: "index", label: "#" },
+    {
+      key: "cite",
+      label: "CITE",
+    }, 
+    {
+      key: "fecha_envio",
+      label: "Fecha de Envio",
+      render: (item) => (
+        <FormattedDate date={item.fecha_envio} format="DD/MMM/YYYY" />
+      )
+    },
+    {
+      key: "referencia",
+      label: "Referencia",
+      render: (item) => item.correspondencia?.referencia,
+    },
+    { key: "prioridad", 
+      label: "Prioridad",
+      render: (item) => item.correspondencia?.prioridad,}, 
+    { key: "estado",
+      label: "Estado",
+      render: (item) => item.correspondencia?.estado,},
+    {
+      key: "contacto",
+      label: "Destinatario",
+      render: (item) => 
+        ` ${item.correspondencia?.contacto?.nombre_contacto}
+          ${item.correspondencia?.contacto?.apellido_pat_contacto}
+          ${item.correspondencia?.contacto?.apellido_mat_contacto} - 
+          ${item.correspondencia?.contacto?.titulo_profesional} -
+          ${item.correspondencia?.contacto?.institucion.razon_social}`
+    },
+    {
+      key: "acciones",
+      label: "Acciones",
+      render: (item) => (
+        <div className="flex gap-2">
+          <a
+            href={`detailDocEntrante/${item.id_doc_entrante}`}
+            className="bg-lime-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Ver
+          </a>
+          <a
+            href={`/correspondenciaRecibida/${item.id_doc_entrante}/edit`}
+            className="bg-orange-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Editar
+          </a>
+        </div>
+      ),
     }
+  ];
 
-  return (
-    <EntityList
-      entityData={{
-        ...EntityData,
-        data: correspondenciasEnviadas, // Pasamos las correspondencias filtradas
-      }}
-    />
-  );
+  const entityData = {
+    title: "Gestión de Correspondencias Enviadas",
+    subTitle: "Listado de correspondencias enviadas",
+    loadingMessage: "Cargando correspondencias enviadas...",
+    errorMessage: "Error al obtener las correspondencias enviadas",
+    fetchDataHook: useDocSalientes,
+    all_data: false, // true para obtener todos los datos, false para paginación
+    itemKey: "id_doc_saliente", //Debe ser igual al modelo
+    entityFields: useFields,
+    clavesBusqueda: ["referencia"],
+    actions: [
+      {
+        to: "/createCorrespondencia",
+        label: "Crear Correspondencia",
+        estilos:
+          "bg-purple-500 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+      },
+    ],
+  };
+
+  return <EntityList entityData={entityData} />;
 }
 export default CorrespondenciaEnviadaList;

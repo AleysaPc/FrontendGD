@@ -18,9 +18,6 @@ const rutasPrivadas = [
   ...correspondenciaRoutes,
 ];
 
-console.log('rutasPublicas:', rutasPublicas);
-console.log('rutasPrivadas:', rutasPrivadas);
-
 const AppRoutes = () => {
   return (
     <ErrorBoundary FallbackComponent={FallbackComponent}>

@@ -1,156 +1,144 @@
-import { InputField } from "../../../components/shared/InputField"
-import { SelectField } from "../../../components/shared/SelectField";
-import CreateEntity from "../../../components/shared/CreateEntity";
-import { useContactos, useDocEntranteMutations } from "../../../hooks/useEntities";
-import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaBackspace, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
-import {  obtenerIdUser } from "../../../utils/auth";
+import { SelectField } from "../../../components/shared/SelectField";
+import { InputField } from "../../../components/shared/InputField";
+import CreateEntity from "../../../components/shared/CreateEntity";
+import { useDocEntranteMutations } from "../../../hooks/useEntities"; // Para enviar la solicitud a la API
+import { obtenerIdUser } from "../../../utils/auth"; // Obtener el ID del usuario actual
 
-export default function createDocEntrante() {
-
+export default function CreateDocEntrante() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
   const logicaNegocio = {
-    idUsuario: obtenerIdUser(),
+    idUsuario: obtenerIdUser(), // ID del usuario actual
   };
 
-  const contactoOptions = ()  => //Modelo 2
+  // Opciones para el select de contacto
+  const contactoOptions = () =>
     paraSelectsdestructuringYMap(
-      useContactos,
-      true, //maneja la logica de la paginacion
+      useContactos, // Suponiendo que tienes un hook para obtener los contactos
+      true,
       "id_contacto",
-      "nombre_completo",
-      
+      "nombre_completo"
     );
 
-    const opcionPrioridad = [
-      { id: "alta", nombre: "Alta" },
-      { id: "media", nombre: "Media" },
-      { id: "baja", nombre: "Baja" },
-    ];
-  
-    const opcionEstado = [
-      { id: "borrador", nombre: "Borrador" },
-      { id: "en revision", nombre: "En revisión" },
-      { id: "aprobado", nombre: "Aprobado" },
-      { id: "rechazado", nombre: "Rechazado" },
-  
-    ];
+  // Opciones para el select de prioridad
+  const opcionPrioridad = [
+    { id: "alta", nombre: "Alta" },
+    { id: "media", nombre: "Media" },
+    { id: "baja", nombre: "Baja" },
+  ];
 
-  const configuracionFormulario = { //Modelo 3 - Correspondencia
+  // Opciones para el select de estado
+  const opcionEstado = [
+    { id: "borrador", nombre: "Borrador" },
+    { id: "en_revision", nombre: "En revisión" },
+    { id: "aprobado", nombre: "Aprobado" },
+    { id: "rechazado", nombre: "Rechazado" },
+  ];
+
+  // Configuración inicial del formulario
+  const configuracionFormulario = {
     nro_registro: "",
     fecha_recepcion: "",
     fecha_respuesta: "",
-    tipo: "recibido",
+    tipo: "recibido", // Valor predeterminado para tipo
     referencia: "",
     descripcion: "",
     paginas: "",
     prioridad: "",
     estado: "",
     documento: "",
-    contacto: "", //Es el nombre del FK que tiene conectado con la correspondencia
+    contacto: "",
+    comentario: "",
+    correspondencia: null, // Enlace a la correspondencia
   };
 
+  // Función para obtener los datos adicionales de los campos antes de enviarlos
   const camposExtras = (formValues) => ({
-    contacto: Number(formValues.contacto),
-    usuario: logicaNegocio.idUsuario,
+    contacto: Number(formValues.contacto), // Convertir contacto a número
+    usuario: logicaNegocio.idUsuario, // ID del usuario que está creando el documento
+    correspondencia: Number(formValues.correspondencia), // ID de la correspondencia
   });
 
+  // Función para configurar el envío de datos al backend
   const paraEnvio = (formValues) => ({
-    link: "/correspondenciaList",
-    params: camposExtras(formValues),
+    link: "/correspondenciaList", // Ruta de destino tras la creación
+    params: camposExtras(formValues), // Datos adicionales
   });
 
+  // Función para crear los campos del formulario
   const construirCampos = (formValues, manejarEntradas) => [
-
     {
-      component : InputField,
-      label : "Nro de Registro",
-      name : "nro_registro",
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Nro de Registro",
+      name: "nro_registro",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
       component: InputField,
-      label: "Fecha de Recepcion",
+      label: "Fecha de Recepción",
       name: "fecha_recepcion",
       type: "date",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component : InputField,
-      label : "Fecha de Respuesta",
-      name : "fecha_respuesta",
-      type : "date",
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Fecha de Respuesta",
+      name: "fecha_respuesta",
+      type: "date",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-      component : InputField,
-      label : "Referencia",
-      name : "referencia",
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Referencia",
+      name: "referencia",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-      component : InputField,
-      label : "Descripción",
-      name : "descripcion",
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Descripción",
+      name: "descripcion",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-      component : InputField,
-      label : "Paginas",
-      name : "paginas",
-      type : "number",
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Páginas",
+      name: "paginas",
+      type: "number",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-      component : SelectField,
-      label : "Prioridad",
-      name : "prioridad",
-      options : opcionPrioridad,
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
+      component: SelectField,
+      label: "Prioridad",
+      name: "prioridad",
+      options: opcionPrioridad,
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-      component : SelectField,
-      label : "Estado",
-      name : "estado",
-      options : opcionEstado,
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
-
+      component: SelectField,
+      label: "Estado",
+      name: "estado",
+      options: opcionEstado,
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
-
     {
-      component : SelectField,
-      label : "Remitente",
-      name : "contacto", //Hace referencia al modelo correspondencia
-      options : contactoOptions(),
-      onChange : manejarEntradas.handleInputChange,
-      actionButtons: [
-        {
-          to: "/editUsuario",
-          icon: FaPencilAlt,
-          estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
-        },
-        {
-          to: "/addCategory",
-          icon: FaPlus,
-          estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
-        },
-        {
-          to: "/categoryList",
-          icon: FaEye,
-          estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
-        },
-      ],
-        
+      component: InputField,
+      label: "Comentario",
+      name: "comentario",
+      required: false,
+      onChange: manejarEntradas.handleInputChange,
     },
+   
     {
       component: InputField,
       label: "Documento",
@@ -159,26 +147,27 @@ export default function createDocEntrante() {
       onChange: manejarEntradas.handleInputChange,
       required: false,
     },
-  ]; 
-  
-  const paraNavegacion = {
-    title : "Registrar Correspondencia Entrante",
-    subTitle : "Registro de correspondencia entrante",
-    icon : FaPlus,
-    actions : [
-        {
-            to : "/correspondenciaList",
-            label : "Volver",
-            icon : FaBackspace,
-            estilos : "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-        },
-    ]
+  ];
 
-  }
-  
+  // Configuración para la navegación y acciones
+  const paraNavegacion = {
+    title: "Registrar Correspondencia Entrante",
+    subTitle: "Registro de correspondencia entrante",
+    icon: FaPlus, // Icono para el título
+    actions: [
+      {
+        to: "/correspondenciaList", // Ruta para volver a la lista
+        label: "Volver",
+        icon: FaBackspace, // Icono para el botón de volver
+        estilos:
+          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+      },
+    ],
+  };
+
   return (
     <CreateEntity
-      useEntityMutations={useDocEntranteMutations}
+      useEntityMutations={useDocEntranteMutations} // Hook para gestionar las mutaciones del DocEntrante
       configForm={configuracionFormulario}
       paraEnvio={paraEnvio}
       construirCampos={construirCampos}
