@@ -1,164 +1,121 @@
-import React, { useState } from "react";
-import { FaBackspace, FaPlus } from "react-icons/fa";
-import { useFormEntity } from "../../../utils/useFormEntity";
-import { SelectField } from "../../../components/shared/SelectField";
+import { useState } from "react";
 import { InputField } from "../../../components/shared/InputField";
+import { SelectField } from "../../../components/shared/SelectField";
 import CreateEntity from "../../../components/shared/CreateEntity";
-import { useDocEntranteMutations } from "../../../hooks/useEntities"; // Para enviar la solicitud a la API
-import { obtenerIdUser } from "../../../utils/auth"; // Obtener el ID del usuario actual
+import {
+  useCorrespondenciaMutations,
+  useDocEntranteMutations,
+  useUsers,
+  useContactos,
+  useCorrespondencias,
+} from "../../../hooks/useEntities";
+import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
+import { useFormEntity } from "../../../utils/useFormEntity";
+import { obtenerIdUser } from "../../../utils/auth";
+import ModalDocEntrante from "../../../components/shared/ModalRegistro";
 
-export default function CreateDocEntrante() {
+export default function createCorrespondencia() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
   const logicaNegocio = {
-    idUsuario: obtenerIdUser(), // ID del usuario actual
+    idUsuario: obtenerIdUser(),
   };
 
-  // Opciones para el select de contacto
-  const contactoOptions = () =>
+  const correspondenciaOptions = () =>
+    //Modelo 2
     paraSelectsdestructuringYMap(
-      useContactos, // Suponiendo que tienes un hook para obtener los contactos
-      true,
-      "id_contacto",
-      "nombre_completo"
+      useCorrespondencias,
+      true, //maneja la logica de la paginacion
+      "id_correspondencia",
+      "id_correspondencia"
     );
+  const [mostrarModalRegistro, setMostrarModalRegistro] = useState(false);
+  const [idCorrespondenciaCreada, setIdCorrespondenciaCreada] = useState(null);
 
-  // Opciones para el select de prioridad
-  const opcionPrioridad = [
-    { id: "alta", nombre: "Alta" },
-    { id: "media", nombre: "Media" },
-    { id: "baja", nombre: "Baja" },
-  ];
-
-  // Opciones para el select de estado
-  const opcionEstado = [
-    { id: "borrador", nombre: "Borrador" },
-    { id: "en_revision", nombre: "En revisión" },
-    { id: "aprobado", nombre: "Aprobado" },
-    { id: "rechazado", nombre: "Rechazado" },
-  ];
-
-  // Configuración inicial del formulario
   const configuracionFormulario = {
     nro_registro: "",
-    fecha_recepcion: "",
+    fecha_recepción: "",
     fecha_respuesta: "",
-    tipo: "recibido", // Valor predeterminado para tipo
-    referencia: "",
-    descripcion: "",
-    paginas: "",
-    prioridad: "",
-    estado: "",
-    documento: "",
-    contacto: "",
-    comentario: "",
-    correspondencia: null, // Enlace a la correspondencia
+    correspodnencia: "",
   };
 
-  // Función para obtener los datos adicionales de los campos antes de enviarlos
   const camposExtras = (formValues) => ({
-    contacto: Number(formValues.contacto), // Convertir contacto a número
-    usuario: logicaNegocio.idUsuario, // ID del usuario que está creando el documento
-    correspondencia: Number(formValues.correspondencia), // ID de la correspondencia
+    usuario: logicaNegocio.idUsuario,
   });
 
-  // Función para configurar el envío de datos al backend
   const paraEnvio = (formValues) => ({
-    link: "/correspondenciaList", // Ruta de destino tras la creación
-    params: camposExtras(formValues), // Datos adicionales
+    link: "/correspondenciaList", // Redirige al listado de correspondencia
+    params: camposExtras(formValues), // Mantiene los parámetros extras
+    onSuccess: (data) => {
+      const id = data?.id; // Asumiendo que el `id` de la correspondencia viene en la respuesta
+      if (id) {
+        setIdCorrespondenciaCreada(id); // Guardamos el ID de la correspondencia
+        console.log("ID de la correspondencia creada:", id); // Aquí puedes usar el id como necesites
+      }
+    },
   });
 
-  // Función para crear los campos del formulario
   const construirCampos = (formValues, manejarEntradas) => [
     {
       component: InputField,
-      label: "Nro de Registro",
+      label: "Nro. Registro",
       name: "nro_registro",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
     {
       component: InputField,
-      label: "Fecha de Recepción",
-      name: "fecha_recepcion",
+      label: "Fecha Recepción",
+      name: "fecha_recepción",
       type: "date",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
     {
       component: InputField,
-      label: "Fecha de Respuesta",
+      label: "Fecha Respuesta",
       name: "fecha_respuesta",
       type: "date",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: InputField,
-      label: "Referencia",
-      name: "referencia",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: InputField,
-      label: "Descripción",
-      name: "descripcion",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: InputField,
-      label: "Páginas",
-      name: "paginas",
-      type: "number",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
+      component: () => (
+        <button
+          type="button"
+          onClick={() => setMostrarModalRegistro(true)}
+          className="bg-blue-200 text-white px-4 py-2 rounded-md"
+        >
+          Correspondencia
+        </button>
+      ),
     },
     {
       component: SelectField,
-      label: "Prioridad",
-      name: "prioridad",
-      options: opcionPrioridad,
+      label: "Correspondencia",
+      name: "correspondencia",
+      options: correspondenciaOptions(),
       required: true,
       onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: SelectField,
-      label: "Estado",
-      name: "estado",
-      options: opcionEstado,
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: InputField,
-      label: "Comentario",
-      name: "comentario",
-      required: false,
-      onChange: manejarEntradas.handleInputChange,
-    },
-   
-    {
-      component: InputField,
-      label: "Documento",
-      name: "documento",
-      type: "file",
-      onChange: manejarEntradas.handleInputChange,
-      required: false,
     },
   ];
+  <button
+    type="button"
+    onClick={() => setMostrarModalRegistro(true)}
+    className="bg-blue-600 text-white px-4 py-2 rounded-md"
+  >
+    Agregar Correspondencia
+  </button>;
 
-  // Configuración para la navegación y acciones
   const paraNavegacion = {
-    title: "Registrar Correspondencia Entrante",
-    subTitle: "Registro de correspondencia entrante",
-    icon: FaPlus, // Icono para el título
+    title: "Crear Correspondencia",
+    subTitle: "Formulario para crear una nueva correspondencia",
+    icon: FaPlus,
     actions: [
       {
-        to: "/correspondenciaList", // Ruta para volver a la lista
+        to: "/correspondenciaList",
         label: "Volver",
-        icon: FaBackspace, // Icono para el botón de volver
+        icon: FaBackspace,
         estilos:
           "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
@@ -166,12 +123,20 @@ export default function CreateDocEntrante() {
   };
 
   return (
-    <CreateEntity
-      useEntityMutations={useDocEntranteMutations} // Hook para gestionar las mutaciones del DocEntrante
-      configForm={configuracionFormulario}
-      paraEnvio={paraEnvio}
-      construirCampos={construirCampos}
-      paraNavegacion={paraNavegacion}
-    />
+    <>
+      <CreateEntity
+        useEntityMutations={useCorrespondenciaMutations}
+        configForm={configuracionFormulario}
+        paraEnvio={paraEnvio}
+        construirCampos={construirCampos}
+        paraNavegacion={paraNavegacion}
+      />
+
+      <ModalDocEntrante
+        isOpen={mostrarModalRegistro}
+        onClose={() => setMostrarModalRegistro(false)}
+        correspondenciaId={idCorrespondenciaCreada}
+      />
+    </>
   );
 }

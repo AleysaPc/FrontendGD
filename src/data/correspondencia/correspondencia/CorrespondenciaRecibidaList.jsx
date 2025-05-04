@@ -40,13 +40,10 @@ function CorrespondenciaRecibidaList() {
       render: (item) => item.correspondencia?.estado,},
     {
       key: "contacto",
-      label: "Remitente ee",
-      render: (item) => 
-        ` ${item.correspondencia?.contacto?.nombre_contacto}
-          ${item.correspondencia?.contacto?.apellido_pat_contacto}
-          ${item.correspondencia?.contacto?.apellido_mat_contacto} - 
-          ${item.correspondencia?.contacto?.titulo_profesional} -
-          ${item.correspondencia?.contacto?.institucion.razon_social}`
+      label: "Remitente",
+      render: (item) => (
+        `${item.correspondencia?.contacto || 'Sin remitente'}`
+      ),
     },
     {
       key: "acciones",

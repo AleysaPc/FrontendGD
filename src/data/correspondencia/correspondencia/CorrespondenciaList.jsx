@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 function CorrespondenciaList() {
   const useFields = () => [
     { key: "index", label: "#" },
+    { key: "nro_registro", label: "Nro. Registro" },
     {
       key: "tipo",
       label: "Tipo",
@@ -31,8 +32,6 @@ function CorrespondenciaList() {
     {
       key: "contacto",
       label: "Contacto",
-      render: (item) =>
-        ` ${item.nombre_contacto} - ${item.apellido_paterno_contacto} - ${item.titulo_profesional}`,
     },
   ];
 
